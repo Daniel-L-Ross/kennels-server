@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from animals import get_all_animals, get_single_animal
+from employees import get_all_employees, get_single_employee
 
 
 # Here's a class. It inherits from another class.
@@ -60,6 +61,13 @@ class HandleRequests(BaseHTTPRequestHandler):
 
             else:
                 response = f"{get_all_animals()}"
+
+        if resource == "employees":
+            if id is not None:
+                response = f"{get_single_employee(id)}"
+
+            else:
+                response = f"{get_all_employees()}"
 
         # This weird code sends a response back to the client
         self.wfile.write(f"{response}".encode())
