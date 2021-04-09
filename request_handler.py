@@ -1,6 +1,7 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from animals import get_all_animals, get_single_animal, create_animal
+from customers import get_all_customers, get_single_customer, create_customer
 from employees import get_all_employees, get_single_employee, create_employee
 from locations import get_all_locations, get_single_location, create_location
 
@@ -64,6 +65,13 @@ class HandleRequests(BaseHTTPRequestHandler):
             else:
                 response = f"{get_all_animals()}"
 
+        if resource == "customers":
+            if id is not None:
+                response = f"{get_single_customer(id)}"
+
+            else:
+                response = f"{get_all_customers()}"
+
         if resource == "employees":
             if id is not None:
                 response = f"{get_single_employee(id)}"
@@ -102,6 +110,9 @@ class HandleRequests(BaseHTTPRequestHandler):
         # function next.
         if resource == "animals":
             new_item = create_animal(post_body)
+
+        if resource == "customers":
+            new_item = create_customer(post_body)
         
         if resource == "employees":
             new_item = create_employee(post_body)
