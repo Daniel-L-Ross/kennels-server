@@ -1,6 +1,3 @@
-from animals import request
-
-
 EMPLOYEES = [
     {
         "id": 2,
@@ -46,3 +43,13 @@ def create_employee(employee):
     EMPLOYEES.append(employee)
 
     return employee
+
+def delete_employee(id):
+    employee_index = -1
+
+    for index, employee in enumerate(EMPLOYEES):
+        if employee["id"] == id:
+            employee_index = index
+
+    if employee_index >= 0:
+        EMPLOYEES.pop(employee_index)
