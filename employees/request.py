@@ -1,7 +1,3 @@
-import employees
-from animals import request
-
-
 EMPLOYEES = [
     {
         "id": 2,
