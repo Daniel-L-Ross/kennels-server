@@ -96,6 +96,9 @@ class HandleRequests(BaseHTTPRequestHandler):
             if key == "email" and resource == "customers":
                 response = get_customers_by_email(value)
 
+            elif key == "location_id" and resource == "animals":
+                response = get_animals_by_location(value)
+
         # This weird code sends a response back to the client
         self.wfile.write(f"{response}".encode())
 
