@@ -13,25 +13,31 @@ from locations import get_all_locations, get_single_location, create_location, d
 class HandleRequests(BaseHTTPRequestHandler):
 
     def parse_url(self, path):
-        # Just like splitting a string in JavaScript. If the
-        # path is "/animals/1", the resulting list will
-        # have "" at index 0, "animals" at index 1, and "1"
-        # at index 2.
         path_params = path.split("/")
         resource = path_params[1]
-        id = None
 
-        # Try to get the item at index 2
-        try:
-            # Convert the string "1" to the integer 1
-            # This is the new parseInt()
-            id = int(path_params[2])
-        except IndexError:
-            pass  # No route parameter exists: /animals
-        except ValueError:
-            pass  # Request had trailing slash: /animals/
+        if "?" in resource:
+            # GIVEN: /customers?email=jenna@solis.com
 
-        return (resource, id)  # This is a tuple
+            param = resource.split("?")[1] # email=jenna@solis.com
+            resource = resource.split("?")[0] # 'customers
+            pair = param.split("=") # [ 'email', 'jenna@solis.com' ]
+            key = pair[0] # 'email'
+            value = pair[1] # 'jenna@solis.com'
+
+            return ( resource, key, value )
+
+        else:
+            id = None
+
+            try:
+                id = int(path_params[2])
+            except IndexError:
+                pass  
+            except ValueError:
+                pass  
+
+            return (resource, id)  
 
     # Here's a class function
     def _set_headers(self, status):
