@@ -1,7 +1,7 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from animals import get_all_animals, get_single_animal, create_animal, delete_animal, update_animal
-from customers import get_all_customers, get_single_customer, create_customer, delete_customer, update_customer
+from customers import get_all_customers, get_single_customer, create_customer, delete_customer, update_customer, get_customers_by_email
 from employees import get_all_employees, get_single_employee, create_employee, delete_employee, update_employee
 from locations import get_all_locations, get_single_location, create_location, delete_location, update_location
 
@@ -61,36 +61,40 @@ class HandleRequests(BaseHTTPRequestHandler):
         self._set_headers(200)
         response = {} #default response
 
-        (resource, id) = self.parse_url(self.path)
+        parsed = self.parse_url(self.path)
 
-        # It's an if..else statement
-        if resource == "animals":
-            if id is not None:
-                response = f"{get_single_animal(id)}"
+        if len(parsed) == 2:
+            (resource, id) = parsed
 
-            else:
-                response = f"{get_all_animals()}"
+            if resource == "animals":
+                if id is not None:
+                    response = f"{get_single_animal(id)}"
+                else:
+                    response = f"{get_all_animals()}"
 
-        if resource == "customers":
-            if id is not None:
-                response = f"{get_single_customer(id)}"
+            elif resource == "customers":
+                if id is not None:
+                    response = f"{get_single_customer(id)}"
+                else:
+                    response = f"{get_all_customers()}"
 
-            else:
-                response = f"{get_all_customers()}"
+            elif resource == "employees":
+                if id is not None:
+                    response = f"{get_single_employee(id)}"
+                else:
+                    response = f"{get_all_employees()}"
+            
+            elif resource == "locations":
+                if id is not None:
+                    response = f"{get_single_location(id)}"
+                else:
+                    response = f"{get_all_locations()}"
 
-        if resource == "employees":
-            if id is not None:
-                response = f"{get_single_employee(id)}"
+        elif len(parsed) == 3:
+            ( resource, key, value ) = parsed
 
-            else:
-                response = f"{get_all_employees()}"
-        
-        if resource == "locations":
-            if id is not None:
-                response = f"{get_single_location(id)}"
-
-            else:
-                response = f"{get_all_locations()}"
+            if key == "email" and resource == "customers":
+                response = get_customers_by_email(value)
 
         # This weird code sends a response back to the client
         self.wfile.write(f"{response}".encode())
