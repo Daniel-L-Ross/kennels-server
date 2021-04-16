@@ -1,6 +1,6 @@
 import sqlite3
 import json
-from models import Animal
+from models import Animal, Location
 
 def get_all_animals():
     # Open a connection to the database
@@ -38,6 +38,10 @@ def get_all_animals():
             animal = Animal(row['id'], row['name'], row['breed'],
                             row['status'], row['location_id'],
                             row['customer_id'])
+
+            location = Location(row['location_name'], row['location_address'])
+
+            animal.location = location.__dict__
 
             animals.append(animal.__dict__)
 
