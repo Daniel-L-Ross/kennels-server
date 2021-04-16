@@ -18,8 +18,12 @@ def get_all_animals():
             a.breed,
             a.status,
             a.location_id,
-            a.customer_id
+            a.customer_id, 
+            l.name location_name,
+            l.address location_address
         FROM animal a
+        JOIN location l
+            ON l.id = a.location_id
         """)
 
         # Initialize an empty list to hold all animal representations
@@ -39,7 +43,7 @@ def get_all_animals():
                             row['status'], row['location_id'],
                             row['customer_id'])
 
-            location = Location(row['location_name'], row['location_address'])
+            location = Location(row['location_id'], row['location_name'], row['location_address'])
 
             animal.location = location.__dict__
 
