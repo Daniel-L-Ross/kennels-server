@@ -54,7 +54,7 @@ def get_all_animals():
 
             customer = Customer(row['customer_id'], row['customer_name'],
                                 row['customer_address'], row['customer_email'])
-            animal.location = customer.__dict__
+            animal.customer = customer.__dict__
 
             animals.append(animal.__dict__)
 
