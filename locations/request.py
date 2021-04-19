@@ -1,6 +1,8 @@
 import sqlite3
 import json
-from models import Location
+from models import Location, Employee
+from animals import get_animals_by_location
+from employees import get_employees_by_location
 
 def get_all_locations():
     with sqlite3.connect("./kennel.db") as conn:
@@ -22,6 +24,8 @@ def get_all_locations():
 
         for row in dataset:
             location = Location(row['id'], row['name'], row['address'])
+            location.animals = json.loads(get_animals_by_location(int(row['id'])))
+            location.employees = json.loads(get_employees_by_location(int(row['id'])))
 
             locations.append(location.__dict__)
 
