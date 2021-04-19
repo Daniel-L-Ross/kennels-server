@@ -1,6 +1,7 @@
 import sqlite3
 import json
 from models import Customer
+from animals import get_animals_by_customer
 
 def get_all_customers():
     with sqlite3.connect("./kennel.db") as conn:
@@ -25,7 +26,7 @@ def get_all_customers():
         for row in dataset:
             customer = Customer(row['id'], row['name'], row['address'], 
                                 row['email'], row['password'])
-        
+            customer.animals = json.loads(get_animals_by_customer(int(row['id'])))
             customers.append(customer.__dict__)
 
     return json.dumps(customers)
