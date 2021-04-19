@@ -2,7 +2,7 @@ import sqlite3
 import json
 from models import Location, Employee
 from animals import get_animals_by_location
-
+from employees import get_employees_by_location
 
 def get_all_locations():
     with sqlite3.connect("./kennel.db") as conn:
@@ -25,26 +25,7 @@ def get_all_locations():
         for row in dataset:
             location = Location(row['id'], row['name'], row['address'])
             location.animals = json.loads(get_animals_by_location(int(row['id'])))
-            db_cursor.execute("""
-            SELECT
-                e.id,
-                e.name,
-                e.address,
-                e.location_id
-            FROM employee e
-            WHERE e.location_id = ?
-            """, ( row['id'], ))
-
-            employees = []
-            dataset = db_cursor.fetchall()
-
-            for row in dataset:
-                employee = Employee(row['id'], row['name'], row['address'], 
-                                    row['location_id'])
-                employees.append(employee.__dict__)
-            location.employees = employees
-
-            # get animals by location and add to location instance
+            location.employees = json.loads(get_employees_by_location(int(row['id'])))
 
             locations.append(location.__dict__)
 
