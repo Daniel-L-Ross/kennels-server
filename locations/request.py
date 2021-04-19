@@ -24,6 +24,7 @@ def get_all_locations():
 
         for row in dataset:
             location = Location(row['id'], row['name'], row['address'])
+            location.animals = json.loads(get_animals_by_location(int(row['id'])))
             db_cursor.execute("""
             SELECT
                 e.id,
@@ -44,7 +45,6 @@ def get_all_locations():
             location.employees = employees
 
             # get animals by location and add to location instance
-            location.animals = get_animals_by_location(row['id'])
 
             locations.append(location.__dict__)
 
